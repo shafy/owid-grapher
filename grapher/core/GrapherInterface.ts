@@ -8,6 +8,7 @@ import {
     EntitySelection,
     ChartTypeName,
     FacetStrategy,
+    Topic,
 } from "./GrapherConstants"
 import { AxisConfigInterface } from "../axis/AxisConfigInterface"
 import { TimeBound } from "../../clientUtils/TimeBounds"
@@ -64,6 +65,7 @@ export interface GrapherInterface extends SortConfig {
     internalNotes?: string
     variantName?: string
     originUrl?: string
+    topics?: Topic[]
     isPublished?: boolean
     baseColorScheme?: ColorSchemeName
     invertColorScheme?: boolean
@@ -180,4 +182,5 @@ export const grapherKeysToSerialize = [
     "hideFacetControl",
     "comparisonLines",
     "relatedQuestions",
+    "topics",
 ]
