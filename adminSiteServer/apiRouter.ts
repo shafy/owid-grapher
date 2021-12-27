@@ -352,7 +352,7 @@ apiRouter.get("/charts.csv", async (req: Request, res: Response) => {
         FROM charts
         JOIN users lastEditedByUser ON lastEditedByUser.id = charts.lastEditedByUserId
         LEFT JOIN users publishedByUser ON publishedByUser.id = charts.publishedByUserId
-        ORDER BY charts.lastEditedAt DESC 
+        ORDER BY charts.lastEditedAt DESC
         LIMIT ?
     `,
         [limit]
@@ -421,6 +421,10 @@ apiRouter.get(
         redirects: await getRedirectsByChartId(req.params.chartId),
     })
 )
+
+apiRouter.get("/topics.json", async (req: Request, res: Response) => ({
+    topics: await wpdb.getTopics(),
+}))
 
 apiRouter.get("/countries.json", async (req: Request, res: Response) => {
     let rows = []
@@ -880,11 +884,11 @@ apiRouter.post(
             let rows: any[] = await t.query(
                 `
                 SELECT id, config, 1 as priority
-                FROM charts 
+                FROM charts
                 WHERE ${whereCond1}
-                
+
                 UNION
-                
+
                 SELECT chartId as id, config, 2 as priority
                 FROM chart_revisions
                 WHERE ${whereCond2}
