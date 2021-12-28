@@ -6,8 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin")
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin")
 
-const TerserJSPlugin = require("terser-webpack-plugin")
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const DotenvWebpackPlugin = require("dotenv-webpack")
 
 const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
@@ -22,6 +21,12 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
 
     const javascriptDir = path.resolve(baseDir, "itsJustJavascript")
     return {
+        cache: {
+            type: "filesystem",
+            buildDependencies: {
+                config: [__filename],
+            },
+        },
         context: javascriptDir,
         entry: {
             admin: "./adminSiteClient/admin.entry.js",
@@ -53,7 +58,7 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
                 },
             },
             minimize: isProduction,
-            minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()],
+            minimizer: ["...", new CssMinimizerPlugin()],
         },
         output: {
             path: path.join(javascriptDir, "webpack"),
