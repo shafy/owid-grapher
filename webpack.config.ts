@@ -1,4 +1,5 @@
 import webpack from "webpack"
+import { Configuration } from "webpack-dev-server"
 import path from "path"
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
@@ -9,7 +10,7 @@ const TerserJSPlugin = require("terser-webpack-plugin")
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const DotenvWebpackPlugin = require("dotenv-webpack")
 
-const config: webpack.ConfigurationFactory = async (env, argv) => {
+const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
     const isProduction = argv.mode === "production"
 
     // baseDir is necessary to make webpack.config.ts use the correct path both in TS as well as in
@@ -32,9 +33,9 @@ const config: webpack.ConfigurationFactory = async (env, argv) => {
                     // The bundle created through this cache group contains all the dependencies
                     // that are _both_ used by owid.entry.js and admin.entry.js.
                     vendors: {
-                        test: (module) =>
-                            !module.type?.startsWith("css") && // no need to split CSS, since there's very little vendor css anyway
-                            /[\\/]node_modules[\\/]/.test(module.resource),
+                        // test: (module) =>
+                        //     !module.type?.startsWith("css") && // no need to split CSS, since there's very little vendor css anyway
+                        //     /[\\/]node_modules[\\/]/.test(module.resource),
                         name: "vendors",
                         chunks: "all",
                         minChunks: 2,
@@ -60,10 +61,12 @@ const config: webpack.ConfigurationFactory = async (env, argv) => {
         resolve: {
             extensions: [".js", ".css"],
             modules: ["node_modules", javascriptDir, baseDir], // baseDir is required for resolving *.scss files
-        },
-        node: {
-            // This is needed so Webpack ignores "dotenv" imports in bundled code
-            fs: "empty",
+            fallback: {
+                // This is needed so Webpack ignores "dotenv" imports in bundled code
+                fs: false,
+                path: false,
+                stream: false,
+            },
         },
         module: {
             rules: [
@@ -104,10 +107,10 @@ const config: webpack.ConfigurationFactory = async (env, argv) => {
             // Provide client-side settings from .env
             new DotenvWebpackPlugin(),
 
-            // Ensure serverSettings.ts and clientSettingsReader.ts never end up in a webpack build by accident
-            new webpack.IgnorePlugin(
-                /settings\/(serverSettings|clientSettingsReader)/
-            ),
+            // Ensure serverSettings.ts never end up in a webpack build by accident
+            new webpack.IgnorePlugin({
+                resourceRegExp: /settings\/serverSettings/,
+            }),
 
             // Remove all moment locales except for "en"
             // This way of doing so is recommended by Moment itself: https://momentjs.com/docs/#/use-it/webpack/
@@ -116,8 +119,8 @@ const config: webpack.ConfigurationFactory = async (env, argv) => {
         devServer: {
             host: "localhost",
             port: 8090,
-            contentBase: "public",
-            disableHostCheck: true,
+            static: { directory: path.join(baseDir, "public") },
+            allowedHosts: "all",
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
