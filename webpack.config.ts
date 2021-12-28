@@ -3,7 +3,7 @@ import { Configuration } from "webpack-dev-server"
 import path from "path"
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const ManifestPlugin = require("webpack-manifest-plugin")
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin")
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin")
 
 const TerserJSPlugin = require("terser-webpack-plugin")
@@ -27,15 +27,16 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
             admin: "./adminSiteClient/admin.entry.js",
             owid: "./site/owid.entry.js",
         },
+        target: "web",
         optimization: {
             splitChunks: {
                 cacheGroups: {
                     // The bundle created through this cache group contains all the dependencies
                     // that are _both_ used by owid.entry.js and admin.entry.js.
                     vendors: {
-                        // test: (module) =>
-                        //     !module.type?.startsWith("css") && // no need to split CSS, since there's very little vendor css anyway
-                        //     /[\\/]node_modules[\\/]/.test(module.resource),
+                        test: (module: any) =>
+                            !module.type?.startsWith("css") && // no need to split CSS, since there's very little vendor css anyway
+                            /[\\/]node_modules[\\/]/.test(module.resource),
                         name: "vendors",
                         chunks: "all",
                         minChunks: 2,
@@ -102,7 +103,7 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
             new MiniCssExtractPlugin({ filename: "[name].css" }),
 
             // Writes manifest.json which production code reads to know paths to asset files
-            new ManifestPlugin(),
+            new WebpackManifestPlugin(),
 
             // Provide client-side settings from .env
             new DotenvWebpackPlugin(),
@@ -119,7 +120,7 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
         devServer: {
             host: "localhost",
             port: 8090,
-            static: { directory: path.join(baseDir, "public") },
+            // static: { directory: path.join(baseDir, "public") },
             allowedHosts: "all",
             headers: {
                 "Access-Control-Allow-Origin": "*",
