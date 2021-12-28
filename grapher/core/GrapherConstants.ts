@@ -81,8 +81,10 @@ export interface RelatedQuestionsConfig {
     url: string
 }
 
+export type TopicId = number
+
 export interface Topic {
-    id: number
+    id: TopicId
     name: string
 }
 
