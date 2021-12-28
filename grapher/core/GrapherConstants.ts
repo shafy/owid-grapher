@@ -80,7 +80,11 @@ export interface RelatedQuestionsConfig {
     text: string
     url: string
 }
-export type Topic = string
+
+export interface Topic {
+    id: number
+    name: string
+}
 
 export const WorldEntityName = "World"
 
