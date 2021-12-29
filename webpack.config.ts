@@ -71,7 +71,6 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
                 // This is needed so Webpack ignores "dotenv" imports in bundled code
                 fs: false,
                 path: false,
-                stream: false,
             },
         },
         module: {
