@@ -19,7 +19,12 @@ const configAdjuster = ({ config }: { config: webpack.Configuration }) => {
             test: /\.scss$/,
             use: [
                 MiniCssExtractPlugin.loader,
-                "css-loader?url=false",
+                {
+                    loader: "css-loader",
+                    options: {
+                        url: false,
+                    },
+                },
                 "sass-loader",
             ],
         },
@@ -30,7 +35,9 @@ const configAdjuster = ({ config }: { config: webpack.Configuration }) => {
 
     config.resolve!.fallback = {
         // This is needed so Webpack ignores "dotenv" imports in bundled code
+        assert: false,
         fs: false,
+        os: false,
         path: false,
     }
 
