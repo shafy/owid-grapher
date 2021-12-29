@@ -70,6 +70,7 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
             fallback: {
                 // This is needed so Webpack ignores "dotenv" imports in bundled code
                 fs: false,
+                os: false,
                 path: false,
             },
         },
@@ -85,7 +86,12 @@ const config = async (env: any, argv: any): Promise<webpack.Configuration> => {
                     test: /\.s?css$/,
                     use: [
                         MiniCssExtractPlugin.loader,
-                        "css-loader?url=false",
+                        {
+                            loader: "css-loader",
+                            options: {
+                                url: false,
+                            },
+                        },
                         "sass-loader",
                     ],
                 },
