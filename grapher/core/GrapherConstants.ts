@@ -1,3 +1,4 @@
+import { TopicId } from "../../clientUtils/owidTypes"
 import { Color } from "../../coreTable/CoreTableConstants"
 
 export enum ChartTypeName {
@@ -80,8 +81,6 @@ export interface RelatedQuestionsConfig {
     text: string
     url: string
 }
-
-export type TopicId = number
 
 export interface Topic {
     id: TopicId
