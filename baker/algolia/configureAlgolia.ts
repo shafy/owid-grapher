@@ -125,6 +125,7 @@ export const configureAlgolia = async () => {
     await graphIndex.setSettings({
         attributesForFaceting: [
             ...[...Array(5)].map((_, i) => `searchable(topics.lvl${i})`),
+            "searchable(type)",
         ],
     })
 }
