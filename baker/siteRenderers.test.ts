@@ -10,7 +10,10 @@ import * as cheerio from "cheerio"
 import { FullPost, WP_PostType } from "../clientUtils/owidTypes"
 import * as wpdb from "../db/wpdb"
 import { renderAutomaticProminentLinks } from "./siteRenderers"
-import { BAKED_BASE_URL } from "../settings/clientSettings"
+import {
+    BAKED_BASE_URL,
+    BAKED_GRAPHER_EXPORTS_BASE_URL,
+} from "../settings/clientSettings"
 
 // There are many possible dimensions to test:
 // - style: default / thin
@@ -36,6 +39,7 @@ const uploadPath = `/uploads/2021/10/Fish-thumbnail-768x404.png`
 jest.mock("../settings/clientSettings.js", () => ({
     WORDPRESS_URL: "http://owid.lndo.site",
     BAKED_BASE_URL: "http://localhost:3030",
+    BAKED_GRAPHER_EXPORTS_BASE_URL: "http://localhost:3030/grapher/exports",
 }))
 
 const getMockBlock = (
@@ -88,7 +92,7 @@ const getMockThumbnailUrl = (id: number) => {
 }
 
 const getMockGrapherThumbnailUrl = (slug: string) => {
-    return `${BAKED_BASE_URL}/grapher/exports/${slug}.svg`
+    return `${BAKED_GRAPHER_EXPORTS_BASE_URL}/${slug}.svg`
 }
 
 const getPostBySlug = jest.spyOn(wpdb, "getPostBySlug")
