@@ -8,7 +8,6 @@ import {
     EntitySelection,
     ChartTypeName,
     FacetStrategy,
-    Topic,
 } from "./GrapherConstants"
 import { AxisConfigInterface } from "../axis/AxisConfigInterface"
 import { TimeBound } from "../../clientUtils/TimeBounds"
@@ -21,7 +20,7 @@ import { EntityId, EntityName } from "../../coreTable/OwidTableConstants"
 import { ColorSchemeName } from "../color/ColorConstants"
 import { QueryParams } from "../../clientUtils/urls/UrlUtils"
 import { OwidChartDimensionInterface } from "../../clientUtils/OwidVariableDisplayConfigInterface"
-import { ColumnSlug, SortConfig } from "../../clientUtils/owidTypes"
+import { ColumnSlug, SortConfig, TopicId } from "../../clientUtils/owidTypes"
 
 // This configuration represents the entire persistent state of a grapher
 // Ideally, this is also all of the interaction state: when a grapher is saved and loaded again
@@ -65,7 +64,7 @@ export interface GrapherInterface extends SortConfig {
     internalNotes?: string
     variantName?: string
     originUrl?: string
-    topics?: Topic[]
+    topicIds?: TopicId[]
     isPublished?: boolean
     baseColorScheme?: ColorSchemeName
     invertColorScheme?: boolean
