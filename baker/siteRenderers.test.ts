@@ -3,7 +3,6 @@
 import {
     ProminentLinkStyles,
     PROMINENT_LINK_CLASSNAME,
-    renderAuthoredProminentLinks,
     WITH_IMAGE,
 } from "../site/blocks/ProminentLink"
 import * as cheerio from "cheerio"
@@ -12,6 +11,7 @@ import * as wpdb from "../db/wpdb"
 import {
     renderAutomaticProminentLinks,
     renderExplorerPage,
+    renderProminentLinks,
 } from "./siteRenderers"
 import { BAKED_BASE_URL } from "../settings/clientSettings"
 import { ExplorerProgram } from "../explorer/ExplorerProgram"
@@ -108,7 +108,7 @@ getMediaThumbnailUrl.mockImplementation((id) =>
 it("renders authored prominent link (grapher, image override, default style)", () => {
     const block = getMockBlock(grapherUrl, title, imageSrc, content)
     const cheerioEl = cheerio.load(block)
-    renderAuthoredProminentLinks(cheerioEl)
+    renderProminentLinks(cheerioEl)
     const prominentLinkEl = cheerioEl(`.${PROMINENT_LINK_CLASSNAME}`)
 
     expect(prominentLinkEl.hasClass(WITH_IMAGE)).toBe(true)
@@ -129,7 +129,7 @@ it("renders authored prominent link (grapher, thin, no image override)", () => {
         ProminentLinkStyles.thin
     )
     const cheerioEl = cheerio.load(block)
-    renderAuthoredProminentLinks(cheerioEl)
+    renderProminentLinks(cheerioEl)
     const prominentLinkEl = cheerioEl(`.${PROMINENT_LINK_CLASSNAME}`)
 
     expect(prominentLinkEl.hasClass(WITH_IMAGE)).toBe(true)
@@ -150,7 +150,7 @@ it("renders authored prominent link (post, thin, with html title)", () => {
         ProminentLinkStyles.thin
     )
     const cheerioEl = cheerio.load(block)
-    renderAuthoredProminentLinks(cheerioEl)
+    renderProminentLinks(cheerioEl)
     const prominentLinkEl = cheerioEl(`.${PROMINENT_LINK_CLASSNAME}`)
 
     expect(prominentLinkEl.hasClass(WITH_IMAGE)).toBe(false)
